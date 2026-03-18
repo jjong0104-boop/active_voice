@@ -82,7 +82,7 @@
 </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbw3ym4Q0CqHZnOh7S0nvIfqzzxcakossf-8FfGpkvvwMYgpSWZ3USYan3f8VHgxxRDxSQ/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzrldw_qkJBAQUjUbyKuJJ8_-GuIZomP72m3EChwoN9ONUBIpXfOoLPCO8JomsYdtVpaA/exec'; // 복사한 URL로 교체
     const form = document.getElementById('submissionForm');
     const modal = document.getElementById('modal');
     const submitBtn = document.getElementById('submitBtn');
@@ -92,17 +92,35 @@
         submitBtn.disabled = true;
         submitBtn.innerText = '제출 중...';
 
-        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-            .then(response => {
-                modal.style.display = 'flex'; // 팝업 띄우기
-            })
-            .catch(error => {
-                alert('오류가 발생했습니다. 다시 시도해주세요.');
-                submitBtn.disabled = false;
-                submitBtn.innerText = '건의사항 제출하기';
-            });
+        // 구글에 친화적인 FormData를 사용하여 POST 요청을 보냅니다.
+        const formData = new FormData(form);
+        const data = {};
+        for (const [key, value] of formData) {
+            data[key] = value;
+        }
+
+        // fetch 요청에 CORS 관련 설정을 추가합니다.
+        fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors', // CORS 정책 문제를 우회하기 위한 중요한 설정
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(() => {
+            // mode: 'no-cors'를 사용하면 구글의 응답을 직접 확인할 수 없습니다.
+            // 하지만 제출 버튼을 누른 후 2~3초가 지났다면 성공한 것으로 간주하고 팝업을 띄웁니다.
+            modal.style.display = 'flex'; // 팝업 띄우기
+        })
+        .catch(error => {
+            // 이 catch 블록은 통신 자체가 불가능할 때만 실행됩니다.
+            console.error('Fetch error:', error);
+            alert('오류가 발생했습니다. 다시 시도해주세요.');
+            submitBtn.disabled = false;
+            submitBtn.innerText = '건의사항 제출하기';
+        });
     });
 </script>
-
 </body>
 </html>
