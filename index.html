@@ -11,37 +11,41 @@
         .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #C0392B; padding-bottom: 20px; }
         .header img { max-width: 150px; }
         .header h1 { margin: 15px 0 0; font-size: 24px; color: #333; }
-        .notice { font-size: 14px; background-color: #eee; padding: 15px; border-radius: 4px; margin-bottom: 20px; }
-        .notice span.required { color: #C0392B; font-weight: bold; }
+        .notice { font-size: 14px; background-color: #eee; padding: 15px; border-radius: 4px; margin-bottom: 20px; line-height: 1.6; }
         .notice strong { color: #C0392B; }
         .form-group { margin-bottom: 20px; }
         label { display: block; font-weight: bold; margin-bottom: 8px; }
-        label span.required { color: #C0392B; }
-        select, input[type="text"], textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        textarea { resize: vertical; height: 150px; }
-        .btn-submit { display: block; width: 100%; padding: 15px; background-color: #C0392B; color: #fff; border: none; border-radius: 4px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background-color 0.3s; }
+        label span { color: #C0392B; }
+        select, input[type="text"], textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
+        textarea { resize: vertical; height: 120px; }
+        .btn-submit { display: block; width: 100%; padding: 15px; background-color: #C0392B; color: #fff; border: none; border-radius: 4px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .btn-submit:hover { background-color: #A93226; }
+
+        /* 팝업(모달) 스타일 */
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: #fff; padding: 40px; border-radius: 12px; text-align: center; max-width: 400px; border-top: 10px solid #C0392B; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .modal-content h2 { color: #C0392B; margin-top: 0; }
+        .modal-content p { line-height: 1.6; font-size: 16px; margin-bottom: 25px; }
+        .btn-close { background: #333; color: #fff; padding: 10px 30px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <img src="엑티브아이티_로고.png" alt="엑티브아이티(주) 로고">
+        <img src="logo.png" alt="엑티브아이티(주) 로고">
         <h1>노사협의회 실명 건의함</h1>
     </div>
 
     <div class="notice">
         안녕하세요. 엑티브아이티 노사협의회입니다.<br>
-        직원 여러분의 소중한 의견을 실시간으로 듣고자 합니다.<br>
-        <strong class="required">*</strong>로 표시된 항목은 필수 입력사항이며, <strong>실명이 아닌 경우 건의사항 접수가 제한될 수 있습니다.</strong><br>
-        본 사이트를 통한 건의는 비밀이 보장됩니다.
+        <strong>*</strong> 필수 항목은 빠짐없이 입력해주세요. <br>
+        실명이 아닌 경우 건의사항 접수가 제한될 수 있습니다.
     </div>
 
-    <form id="submissionForm" action="https://script.google.com/macros/s/AKfycbyeyqqi39DpbL4t2a2Dix37E6athH2rE1ZRKoqKAdVf1qz6jPFGJj72AnsKc65MPeoWHw/exec" method="POST">
-        
+    <form id="submissionForm">
         <div class="form-group">
-            <label for="category">분류 <span class="required">*</span></label>
+            <label for="category">분류 <span>*</span></label>
             <select id="category" name="category" required>
                 <option value="" disabled selected>선택해주세요</option>
                 <option value="고충 처리">고충 처리</option>
@@ -49,30 +53,56 @@
                 <option value="협의회 안건">협의회 안건</option>
             </select>
         </div>
-
         <div class="form-group">
-            <label for="title">제목 <span class="required">*</span></label>
+            <label for="title">제목 <span>*</span></label>
             <input type="text" id="title" name="title" required placeholder="한 줄로 요약해주세요">
         </div>
-
         <div class="form-group">
-            <label for="content">상세 내용 <span class="required">*</span></label>
-            <textarea id="content" name="content" required placeholder="구체적인 상황이나 개선 아이디어를 적어주세요"></textarea>
+            <label for="content">상세 내용 <span>*</span></label>
+            <textarea id="content" name="content" required placeholder="구체적인 내용을 적어주세요"></textarea>
         </div>
-
         <div class="form-group">
-            <label for="name">성함 <span class="required">*</span></label>
+            <label for="name">성함 <span>*</span></label>
             <input type="text" id="name" name="name" required placeholder="실명을 입력해주세요">
         </div>
-
         <div class="form-group">
-            <label for="department">부서 <span class="required">*</span></label>
+            <label for="department">부서 <span>*</span></label>
             <input type="text" id="department" name="department" required placeholder="부서명을 입력해주세요">
         </div>
-
-        <button type="submit" class="btn-submit">건의사항 제출하기</button>
+        <button type="submit" class="btn-submit" id="submitBtn">건의사항 제출하기</button>
     </form>
 </div>
+
+<div id="modal">
+    <div class="modal-content">
+        <h2>제출 완료!</h2>
+        <p>성공적으로 접수되었습니다.<br>오늘 하루도 고생하셨습니다.<br><strong>노사협의회가 당신을 응원합니다!</strong></p>
+        <button class="btn-close" onclick="location.reload()">닫기</button>
+    </div>
+</div>
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyeyqqi39DpbL4t2a2Dix37E6athH2rE1ZRKoqKAdVf1qz6jPFGJj72AnsKc65MPeoWHw/exec';
+    const form = document.getElementById('submissionForm');
+    const modal = document.getElementById('modal');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault(); // 페이지 이동 방지
+        submitBtn.disabled = true;
+        submitBtn.innerText = '제출 중...';
+
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => {
+                modal.style.display = 'flex'; // 팝업 띄우기
+            })
+            .catch(error => {
+                alert('오류가 발생했습니다. 다시 시도해주세요.');
+                submitBtn.disabled = false;
+                submitBtn.innerText = '건의사항 제출하기';
+            });
+    });
+</script>
 
 </body>
 </html>
